@@ -1,0 +1,103 @@
+<!DOCTYPE html:>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>Static html blog - spiraltechnology
+    </title>
+    <link rel="alternate" href="http://www.spiraltechnology.co.uk/feed.xml" type="application/rss+xml" title="simple, pragmatic, elegant code"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+  </head>
+  <body>
+    <div id="content">
+      <nav>
+        <div class="menuitem"><a href="/index.html">home</a></div>
+        <div class="menuitem"><a href="/blog.html">blog</a></div>
+        <div class="menuitem"><a href="/contact.html">contact</a></div>
+      </nav>
+      <div class="content-wrap">
+        <article class="article">
+          <h1>Static html blog</h1>
+          <section class="content"><p>After 2 years of inactivity, I decided to resurrect my blog as a place to store technical snippets.  Previously I wrote my blog using <a href="http://jekyllrb.com/">Jekyll</a>, but did not get on with Ruby and constant Gem updates, so am giving <a href="http://wintersmith.io/">Wintersmith</a> a try, it’s built on top of node.js, easy to install and under active&nbsp;development.</p>
+<p>Last time I ground to a halt because my laptop was stolen before I backed up the code anywhere, so I’ll be pushing the source to GitHub and trying out their user pages for&nbsp;hosting.</p>
+<p><span class="more"></span></p>
+<ol>
+<li><p>Install node.js I chose to <a href="http://nodejs.org/download/">download</a> the package and install it, but it’s available on  brew as&nbsp;well.</p>
+</li>
+<li><p>Install <a href="https://github.com/jnordberg/wintersmith#quick-start">wintersmith</a> using npm.  The -g option makes it globally&nbsp;available.</p>
+<pre><code class="lang-bash"><span class="built_in">sudo</span> npm install wintersmith -g</code></pre>
+</li>
+<li><p>As I had decided that I be wanted to store the source of the website and host the output on GitHub, I needed to create a repository to show my user pages and a repository to store the source code of the&nbsp;website. </p>
+<p> The user pages are created in the format <em>username.github.io</em> so in my case I created a public repository named davidtron.github.io 
+ <img src="/articles/building-static-blog/create-user-repo.png" alt="creating new deployment repository"></p>
+<p> I then created another repository for the sourcecode called&nbsp;spiraltechnology-website</p>
+</li>
+<li><p>Open a terminal and check out the empty repository, in my case into my dev&nbsp;directory.</p>
+<pre><code class="lang-bash"><span class="built_in">cd</span> ~/dev
+git clone https://github.com/davidtron/spiraltechnology-website</code></pre>
+</li>
+<li><p>Create a new website, by default wintersmith will create you a basic blog structure with a plugin to render blog articles and an rss feed.  It complains if the directory exists, but in this case I want to populate the directory of my empty spiraltechnology-website repo, so I used the —force&nbsp;flag.</p>
+<pre><code class="lang-bash">wintersmith new spiraltechnology-website --force
+<span class="built_in">cd</span> spiraltechnology-website
+wintersmith preview</code></pre>
+<p>The first problem I had&nbsp;was </p>
+<pre><code class="lang-bash">template archive.jade: /Users/david/dev/spiraltechnology-website/
+templates/layout.jade: &gt; <span class="number">1</span>| !!! <span class="number">5</span></code></pre>
+<p>Looks like the version in npm is not yet up to date with the version on github.  To fix follow it’s advice and <em>replace !!! 5</em> with <em>doctype&nbsp;html</em></p>
+<pre><code class="lang-bash">nano -w /Users/david/dev/spiraltechnology-website/templates/layout.jade</code></pre>
+<p>Once done you can view the site in a browser on&nbsp;localhost:8080</p>
+</li>
+<li><p>After creating some content and tweaking the layout and css, I added my files, commited them to my local repo then pushed the changes up to&nbsp;github.</p>
+<pre><code class="lang-bash"><span class="built_in">cd</span> ~/dev/spiraltechnology-website-deploy
+git add *
+git commit <span class="operator">-a</span> -m <span class="string">"First pages commit. <span class="caps">WIP</span>"</span>
+git push origin master</code></pre>
+</li>
+<li><p>Once happy with the site, you need to configure wintersmith to build the flat files to a local directory and the contents on this directory needs to be <a href="http://pages.github.com/">published to the username.github.io repository</a> we created&nbsp;earlier.</p>
+<p>Checkout the empty&nbsp;repository</p>
+<pre><code class="lang-bash"><span class="built_in">cd</span> ~/dev
+git clone https://github.com/davidtron/davidtron.github.io.git spiraltechnology-website-deploy
+<span class="built_in">cd</span> spiraltechnology-website-deploy
+git checkout master</code></pre>
+</li>
+<li><p>Configure wintersmith to build to the deploy directory. This is controlled by adding an output option to config.json in the root of the directory wintersmith created for&nbsp;us.</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"locals"</span>: {
+    <span class="string">"url"</span>: <span class="string">"http://www.spiraltechnology.co.uk"</span>,
+    <span class="string">"name"</span>: <span class="string">"spiraltechnology"</span>,
+    <span class="string">"owner"</span>: <span class="string">"David"</span>,
+    <span class="string">"description"</span>: <span class="string">"simple, pragmatic, elegant code"</span>
+  },
+  <span class="string">"output"</span> : <span class="string">"../spiraltechnology-website-deploy"</span>
+  ...
+}</code></pre>
+</li>
+<li><p>In the source directory compile the website, it should output it into the newly created deployment&nbsp;directory</p>
+<pre><code class="lang-bash"><span class="built_in">cd</span> ~/dev/spiraltechnology-website
+wintersmith build</code></pre>
+</li>
+<li><p>Add the files in the github pages branch and push it up to the&nbsp;server.</p>
+<pre><code class="lang-bash"> <span class="built_in">cd</span> ~/dev/spiraltechnology-website-deploy
+ git add *
+ git commit <span class="operator">-a</span> -m <span class="string">"First pages commit."</span>
+ git push origin master</code></pre>
+</li>
+</ol>
+</section>
+        </article>
+        <div class="nav"><a href="/blog.html">« Back to blog</a></div>
+      </div>
+    </div>
+    <footer>
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+            <script type="text/javascript">
+              //if(screen.width > 690) {
+                 $.backstretch('/img/woven.jpg',{speed: 200, centeredY: false});
+              //}
+            </script>
+    </footer>
+  </body>
+</html>
