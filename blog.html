@@ -40,6 +40,67 @@ I then wanted to point my domain at&nbsp;it.</p>
             <p class="more"><a href="/articles/building-static-blog/">more</a></p>
           </section>
         </article>
+        <article class="article intro">
+          <header>
+            <p class="date"><span>10. January 2014</span></p>
+            <h1><a href="/articles/phonegap-ios-without-developer-account/">Install phone gap apps on iPhone without developer account</a></h1>
+          </header>
+          <section class="content"><ol>
+<li>Download nodes
+<a href="http://nodejs.org/download/">http://nodejs.org/download/</a></li>
+<li><p>Install phonegap
+ $ sudo npm install -g&nbsp;phonegap</p>
+</li>
+<li><p>phonegap create my-app
+cd my-app
+phone gap build&nbsp;ios</p>
+</li>
+</ol>
+<p>How to build and install phone gap apps on jailbroken iOS 7&nbsp;devices</p>
+<ol>
+<li><p>Create a self signed&nbsp;certificate</p>
+<ul>
+<li>open the Keychain Access&nbsp;application</li>
+<li>select Keychain Access &gt; Certificate Assistant &gt; Create A Certificate&nbsp;…  </li>
+<li>On the first page fill in the following
+Name: iPhone Developer
+Identify Type: Self Signed Root
+Certification Type: Code Signing
+Select “Let me override defaults” and press continue, it will say “You are about to create a self-signed certificate.” 
+   press&nbsp;continue</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>On the second page fill in the following
+ Serial number: 1
+ Validity period :&nbsp;3650</p>
+<pre><code> press continue</code></pre>
+</li>
+<li><p>On the third page remove your email&nbsp;address.</p>
+</li>
+<li>Keep pressing continue until you reach the Specify location page, press&nbsp;create.</li>
+</ul>
+<ol>
+<li><p>Open the terminal. For Xcode 5.02 these paths are valid but might need to be updated for newer&nbsp;versions. </p>
+<blockquote>
+<p>cd&nbsp;/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform</p>
+</blockquote>
+<ul>
+<li>create a backup of Info.plist and change it into xml<blockquote>
+<p>sudo cp -p Info.plist Info.plist.orig
+sudo plutil -convert xml1&nbsp;./Info.plist</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<p>$ # replace each occurrence of CiPhoneOSCodeSignContext with XCCodeSignContext in Info.plist
+$ sudo sed -i .bkup ‘s/XCiPhoneOSCodeSignContext/XCCodeSignContext/g’&nbsp;./Info.plist</p>
+<p><a href="http://mhassan.me/2013/02/15/using-xcode-without-provisioning-profile/">http://mhassan.me/2013/02/15/using-xcode-without-provisioning-profile/</a></p>
+
+          </section>
+        </article>
         <div class="nav"><a href="/archive.html">« Archives &nbsp;</a>
         </div>
       </div>
